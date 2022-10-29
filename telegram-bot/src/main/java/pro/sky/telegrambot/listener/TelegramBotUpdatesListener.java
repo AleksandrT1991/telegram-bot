@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pro.sky.telegrambot.processors.MessageProcessor;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
@@ -19,6 +20,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
 
     @Autowired
+    private MessageProcessor messageProcessor;
+
+    @Autowired
     private TelegramBot telegramBot;
 
     @PostConstruct
@@ -28,14 +32,14 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     @Override
     public int process(List<Update> updates) {
+
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
             String message = update.message().text();
-            if (Objects.nonNull(message) && message.equalsIgnoreCase("Привет бот")){
-                SendMessage messageToUser = new SendMessage(update.message().chat().id(), "Добрый день");
-                telegramBot.execute(messageToUser);
-            }
 
+            if (Objects.nonNull(message)){
+                messageProcessor.process(update);
+            }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
