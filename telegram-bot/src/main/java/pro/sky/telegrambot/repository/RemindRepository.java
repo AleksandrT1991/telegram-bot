@@ -9,4 +9,3 @@ import pro.sky.telegrambot.repository.entity.RemindEntity;
 public interface RemindRepository extends CrudRepository<RemindEntity, Long> {
 
 }
-//
