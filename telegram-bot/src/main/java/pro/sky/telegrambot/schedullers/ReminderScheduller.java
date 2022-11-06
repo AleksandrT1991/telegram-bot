@@ -24,7 +24,7 @@ public class ReminderScheduller {
     @Autowired
     private TelegramBot telegramBot;
 
-    @Scheduled(fixedRate = 90000)
+    @Scheduled(cron = "0 0/1 * * * *")
     public void sendremind() {
         Iterable<RemindEntity> all = repository.findAll();
         LocalDateTime ltd = LocalDateTime.ofInstant(Instant.now(), ZoneId.systemDefault());
